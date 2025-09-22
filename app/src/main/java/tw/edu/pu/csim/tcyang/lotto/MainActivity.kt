@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,8 @@ import tw.edu.pu.csim.tcyang.lotto.ui.theme.LottoTheme
 
 import androidx.compose.runtime.setValue // 引入 setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.geometry.Offset
 
 
 class MainActivity : ComponentActivity() {
@@ -49,16 +52,25 @@ fun Play(modifier: Modifier = Modifier) {
         mutableStateOf((1..100).random())
     }
 
-    val context = LocalContext.current
+    var touchX by remember { mutableStateOf(0f) }
+    var touchY by remember { mutableStateOf(0f) }
+
+    val context = LocalContext.current // 取得當前 Context
 
     Column (modifier = modifier
         .fillMaxSize()
-        .clickable {
-        Toast.makeText(context, "螢幕觸控(羅婉薰)", Toast.LENGTH_LONG).show()
-    } ,
+        .pointerInput(Unit) {
+            detectTapGestures(
+                onPress = { offset: Offset ->
+                    touchX = offset.x
+                    touchY = offset.y
+                    Toast.makeText(context, "螢幕觸控: x=${touchX.toInt()}, y=${touchY.toInt()}", Toast.LENGTH_SHORT).show()
+                }
+            )
+        },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
-        ){
+    ){
         Text(
             text = "樂透數字(1-100)為 $lucky"
         )
@@ -68,6 +80,9 @@ fun Play(modifier: Modifier = Modifier) {
         ) {
             Text("重新產生樂透碼")
         }
+        Text(
+            text = "x 軸座標: ${touchX.toInt()}, y 軸座標: ${touchY.toInt()}"
+        )
     }
 
 
