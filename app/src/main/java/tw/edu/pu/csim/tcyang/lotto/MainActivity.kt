@@ -5,7 +5,8 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.gestures.detectDragGestures // 確保引入 detectDragGestures
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -56,24 +57,24 @@ fun Play(modifier: Modifier = Modifier) {
     var touchX by remember { mutableStateOf(0f) }
     var touchY by remember { mutableStateOf(0f) }
 
+    // 儲存計數器數值的狀態
+    var count by remember { mutableStateOf(50) }
+
     val context = LocalContext.current
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            // 使用 pointerInput 偵測拖曳手勢，即時更新座標
+            // 使用 pointerInput 偵測整個畫面的拖曳手勢，即時更新座標
             .pointerInput(Unit) {
                 detectDragGestures(
-                    onDragStart = { offset ->
-                        // 拖曳開始時的座標
-                        touchX = offset.x
-                        touchY = offset.y
-                        Toast.makeText(context, "拖曳開始: x=${touchX.toInt()}, y=${touchY.toInt()}", Toast.LENGTH_SHORT).show()
-                    },
                     onDrag = { change, _ ->
-                        // 拖曳過程中，不斷更新座標
                         touchX = change.position.x
                         touchY = change.position.y
+                    },
+                    onDragStart = { offset ->
+                        // 拖曳開始時的訊息
+                        Toast.makeText(context, "拖曳開始: x=${offset.x.toInt()}, y=${offset.y.toInt()}", Toast.LENGTH_SHORT).show()
                     },
                     onDragEnd = {
                         // 拖曳結束時的訊息
@@ -93,10 +94,30 @@ fun Play(modifier: Modifier = Modifier) {
         ) {
             Text("重新產生樂透碼")
         }
+        Text("與Brian共同編輯程式")
 
         // 顯示即時更新的座標
         Text(
             text = "目前座標: x=${touchX.toInt()}, y=${touchY.toInt()}"
+        )
+
+        // 帶有短按和長按功能的計數器
+        Text(
+            text = "計數器: $count",
+            modifier = Modifier
+                .padding(top = 16.dp)
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = {
+                            count-- // 短按，數值減 1
+                            Toast.makeText(context, "短按: 計數器 -1", Toast.LENGTH_SHORT).show()
+                        },
+                        onLongPress = {
+                            count++ // 長按，數值加 1
+                            Toast.makeText(context, "長按: 計數器 +1", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
         )
     }
 }
