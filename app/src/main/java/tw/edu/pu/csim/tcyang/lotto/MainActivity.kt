@@ -64,7 +64,7 @@ fun Play(modifier: Modifier = Modifier) {
                 onPress = { offset: Offset ->
                     touchX = offset.x
                     touchY = offset.y
-                    Toast.makeText(context, "螢幕觸控: x=${touchX.toInt()}, y=${touchY.toInt()}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "螢幕觸控: x= ${touchX.toInt()}, y= ${touchY.toInt()}", Toast.LENGTH_SHORT).show()
                 }
             )
         },
