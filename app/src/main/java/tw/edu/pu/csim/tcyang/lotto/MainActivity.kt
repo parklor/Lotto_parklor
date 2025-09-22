@@ -1,9 +1,11 @@
 package tw.edu.pu.csim.tcyang.lotto
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import tw.edu.pu.csim.tcyang.lotto.ui.theme.LottoTheme
 
 import androidx.compose.runtime.setValue // 引入 setValue
+import androidx.compose.ui.platform.LocalContext
 
 
 class MainActivity : ComponentActivity() {
@@ -46,7 +49,13 @@ fun Play(modifier: Modifier = Modifier) {
         mutableStateOf((1..100).random())
     }
 
-    Column (modifier = modifier.fillMaxSize(),
+    val context = LocalContext.current
+
+    Column (modifier = modifier
+        .fillMaxSize()
+        .clickable {
+        Toast.makeText(context, "螢幕觸控(羅婉薰)", Toast.LENGTH_LONG).show()
+    } ,
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
         ){
