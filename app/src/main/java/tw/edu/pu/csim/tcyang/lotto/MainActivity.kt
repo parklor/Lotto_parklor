@@ -81,7 +81,7 @@ fun Play(modifier: Modifier = Modifier) {
             Text("重新產生樂透碼")
         }
         Text(
-            text = "x 軸座標: ${touchX.toInt()}, y 軸座標: ${touchY.toInt()}"
+            text = "x 軸座標:${touchX.toInt()}, y 軸座標:${touchY.toInt()}"
         )
     }
 
