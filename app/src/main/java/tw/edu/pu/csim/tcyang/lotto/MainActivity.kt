@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue // 引入 setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.unit.dp
 
 
 class MainActivity : ComponentActivity() {
@@ -54,6 +55,7 @@ fun Play(modifier: Modifier = Modifier) {
 
     var touchX by remember { mutableStateOf(0f) }
     var touchY by remember { mutableStateOf(0f) }
+    var count by remember { mutableStateOf(50) }
 
     val context = LocalContext.current // 取得當前 Context
 
@@ -82,6 +84,23 @@ fun Play(modifier: Modifier = Modifier) {
         }
         Text(
             text = "x 軸座標:${touchX.toInt()}, y 軸座標:${touchY.toInt()}"
+        )
+        Text(
+            text = "計數器:$count",
+            modifier = Modifier
+                .padding(top = 16.dp) // 增加一些間距，讓排版更清楚
+                .pointerInput(Unit) {
+                    detectTapGestures(
+                        onTap = {
+                            count-- // 短按時，計數器減 1
+                            Toast.makeText(context, "短按: 計數器 -1", Toast.LENGTH_SHORT).show()
+                        },
+                        onLongPress = {
+                            count++ // 長按時，計數器加 1
+                            Toast.makeText(context, "長按: 計數器 +1", Toast.LENGTH_SHORT).show()
+                        }
+                    )
+                }
         )
     }
 
